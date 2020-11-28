@@ -7,6 +7,7 @@ const Wetweet = ({ wetweetObj, isOwner }) => {
   const onDeleteClick = async () => {
     const ok = window.confirm("Are you sure you want to delete this this?");
     if (ok) {
+      // Delete Wetweet
       await dbService.doc(`wetweets/${wetweetObj.id}`).delete();
       await storageService.refFromURL(wetweetObj.attachmentUrl).delete();
     }
