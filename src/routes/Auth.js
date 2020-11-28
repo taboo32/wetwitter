@@ -20,31 +20,34 @@ const Auth = () => {
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
-        let data;
-        if (newAccount) {
-            data = await authService.createUserWithEmailAndPassword(email, password);
-        } else {
-            data = await authService.signInWithEmailAndPassword(email, password);
-        }
-        console.log(data)
+      let data;
+      if (newAccount) {
+        data = await authService.createUserWithEmailAndPassword(
+          email,
+          password
+        );
+      } else {
+        data = await authService.signInWithEmailAndPassword(email, password);
+      }
+      console.log(data);
     } catch (error) {
-        setError(error.essage);
+      setError(error.essage);
     }
   };
-  const toggleAccount = () => setNewAccount((prev) => ! prev)
+  const toggleAccount = () => setNewAccount((prev) => !prev);
   const onSocialClick = async (event) => {
-      const {
-          target : { name },
-      } = event;
-      let provider;
-      if (name === "google") {
-          provider = new firebaseInstance.auth.GoogleAuthProvider();
-      } else if (name === "github") {
-          provider = new firebaseInstance.auth.GithubAuthProvider();
-      }
-      const data = await authService.signInWithPopup(provider);
-      console.log(data);
-  }
+    const {
+      target: { name },
+    } = event;
+    let provider;
+    if (name === "google") {
+      provider = new firebaseInstance.auth.GoogleAuthProvider();
+    } else if (name === "github") {
+      provider = new firebaseInstance.auth.GithubAuthProvider();
+    }
+    const data = await authService.signInWithPopup(provider);
+    console.log(data);
+  };
   return (
     <div>
       <form onSubmit={onSubmit}>
@@ -64,18 +67,21 @@ const Auth = () => {
           value={password}
           onChange={onChange}
         />
-        <input type="submit" value={newAccount ? "Create Account" : "Sign In"} />
+        <input
+          type="submit"
+          value={newAccount ? "Create Account" : "Sign In"}
+        />
         {error}
       </form>
       <span onClick={toggleAccount}>
-          {newAccount ? "Sign In" : "Create Account"}
+        {newAccount ? "Sign In" : "Create Account"}
       </span>
       <div>
         <button onClick={onSocialClick} name="google">
-            Continue with Google
+          Continue with Google
         </button>
         <button onClick={onSocialClick} name="github">
-            Continue with Github
+          Continue with Github
         </button>
       </div>
     </div>
