@@ -16,9 +16,9 @@ const Home = ({ userObj }) => {
     });
   }, []);
   return (
-    <div>
+    <div className="container">
       <WetweetFactory userObj={userObj} />
-      <div>
+      <div style={{ marginTop: 30 }}>
         {wetweets.map((wetweet) => (
           <Wetweet
             key={wetweet.id}

@@ -1,5 +1,7 @@
 import { dbService, storageService } from "fbase";
 import React, { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 
 const Wetweet = ({ wetweetObj, isOwner }) => {
   const [editing, setEditing] = useState(false);
@@ -9,7 +11,9 @@ const Wetweet = ({ wetweetObj, isOwner }) => {
     if (ok) {
       // Delete Wetweet
       await dbService.doc(`wetweets/${wetweetObj.id}`).delete();
-      await storageService.refFromURL(wetweetObj.attachmentUrl).delete();
+      await storageService
+        .refFromURL(wetweetObj.attachmentUrl)
+        .firebase.storage.delete();
     }
   };
   const toggleEditing = () => setEditing((prev) => !prev);
@@ -27,36 +31,46 @@ const Wetweet = ({ wetweetObj, isOwner }) => {
     setNewWetweet(value);
   };
   return (
-    <div>
+    <div className="wetweet">
       {editing ? (
         <>
           {isOwner && (
             <>
-              <form onSubmit={onSubmit}>
+              <form onSubmit={onSubmit} className="container wetweetEdit">
                 <input
                   type="text"
                   placeholder="Edit your Wetweet"
                   value={newWetweet}
                   required
                   onChange={onChange}
+                  autoFocus
+                  className="formInput"
                 />
-                <input type="submit" value="Update Wetweet" />
+                <input
+                  type="submit"
+                  value="Update Wetweet"
+                  className="formBtn"
+                />
               </form>
-              <button onClick={toggleEditing}> Cancel </button>
+              <span onClick={toggleEditing} className="formBtn cancelBtn">
+                Cancel
+              </span>
             </>
           )}
         </>
       ) : (
         <>
           <h4>{wetweetObj.text}</h4>
-          {wetweetObj.attachmentUrl && (
-            <img src={wetweetObj.attachmentUrl} width="50px" height="50px" />
-          )}
+          {wetweetObj.attachmentUrl && <img src={wetweetObj.attachmentUrl} />}
           {isOwner && (
-            <>
-              <button onClick={onDeleteClick}>Delete Wetweet</button>
-              <button onClick={toggleEditing}>Edit Wetweet</button>
-            </>
+            <div className="wetweet__actions">
+              <span onClick={onDeleteClick}>
+                <FontAwesomeIcon icon={faTrash} />
+              </span>
+              <span onClick={toggleEditing}>
+                <FontAwesomeIcon icon={faPencilAlt} />
+              </span>
+            </div>
           )}
         </>
       )}

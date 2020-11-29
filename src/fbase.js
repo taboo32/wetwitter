@@ -17,5 +17,7 @@ firebase.initializeApp(firebaseConfig);
 export const firebaseInstance = firebase;
 
 export const authService = firebase.auth();
+// db
 export const dbService = firebase.firestore();
+// storage (image 및 비디오 저장소)
 export const storageService = firebase.storage();
